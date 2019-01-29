@@ -16,9 +16,20 @@ public class Project {
     private String title;
 
     private String description;
+    
+    @Version
+    private Long version;
 
 
-    @NotNull
+    public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	@NotNull
     @ManyToOne(cascade = {CascadeType.PERSIST})
     private Enterprise enterprise;
 
@@ -54,6 +65,9 @@ public class Project {
     }
 
     public void setEnterprise(Enterprise enterprise) {
+    	if (this.enterprise != null) {
+    		this.enterprise.delProject(this);
+    	}
         this.enterprise = enterprise;
     }
 }

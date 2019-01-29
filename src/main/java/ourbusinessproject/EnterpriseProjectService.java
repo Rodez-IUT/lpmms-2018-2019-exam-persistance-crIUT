@@ -16,18 +16,18 @@ public class EnterpriseProjectService {
     private EntityManager entityManager;
 
     public Project saveProjectForEnterprise(Project project, Enterprise enterprise) {
-        saveEnterprise(enterprise);
-        project.setEnterprise(enterprise);
-        enterprise.addProject(project);
-        entityManager.persist(project);
+    	Enterprise savedEnterprise = saveEnterprise(enterprise);
+    	project.setEnterprise(savedEnterprise);
+        Project savedProject = entityManager.merge(project);
+    	savedEnterprise.addProject(savedProject);
         entityManager.flush();
-        return project;
+        return savedProject;
     }
 
     public Enterprise saveEnterprise(Enterprise enterprise) {
-        entityManager.persist(enterprise);
+    	Enterprise savedEnterprise = entityManager.merge(enterprise);
         entityManager.flush();
-        return enterprise;
+        return savedEnterprise;
     }
 
     public Project findProjectById(Long id) {
